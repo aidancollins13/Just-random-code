@@ -1,0 +1,13 @@
+#include <string>
+
+class FrogPrince;
+
+class Princess {
+public:
+	Princess(const std::string& name);
+	void display() const;
+private:
+	string& name;
+	FrogPrince* spouce;
+
+}
