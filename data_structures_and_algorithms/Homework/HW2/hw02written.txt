@@ -1,0 +1,17 @@
+Aidan Collins
+
+1
+	a O(long(n))
+	b O(nlog(n))
+	c O(n)
+	d O(n^2)
+
+2	
+	delete []  is the syntax to delete an array off the heap, delete is used to delete called on a pointer to an 		object in order to remove that object from the heap
+
+3
+	freind memoryBuffer& operator=(memoryBuffer& rhs){
+		theSize = rhs.theSize;
+		delete objects;
+		Object* = new Object(rhs.objects);
+	}

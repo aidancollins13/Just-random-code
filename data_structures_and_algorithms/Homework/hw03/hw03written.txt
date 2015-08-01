@@ -1,0 +1,47 @@
+Aidan Collins - feb 22 2015
+
+question 1
+The average would have been O(n)
+The worst case could have been O(n^2)
+
+Question 2
+3
+6
+10
+ is printed.  c.begin is 1 and 2 past the first entry is 3 so itr1 points to 3.
+5 is 4 past c.begin so itr 2 is 5 at first then once its get eraced 6 is put in the location where 5 was so itr2 now points 	to 6
+9 is 8 past c.begin so itr3 is 9 but once 5 gets eraced the vector is shortened and all values past 5 are movet up 	one so itr3 then becomes 10
+
+Question 3
+0 is printed.  itr contains the value of c.begin() when itr was initalized which was 0.  but because pushing back 100 elements would go over the capacity of the origional vector a new bigger vector would be made with c.begin() and all the other elements in a new memory location and itr would still be pointing to the c.begin() of the smaller, older vector.
+
+Question 4
+126 would be printed
+
+Question 5
+a	(oneTwoThree, oneTwoThree + 6)
+
+b	(A.begin(), A.begin()+6, D.begin())
+
+c	(B.begin(),B.end()
+	, B.end(), 
+
+d	, A.begin()+3, C.begin()
+
+e	A.begin(), A.end()
+	*vecItr
+	C.begin(), C.end()
+	*vecItr
+
+f	C.begin(),C,end()
+
+g	B.begin()+4	
+	A.end(), greater<int>()
+
+h	A.begin(), A.end(), E.begin()
+
+i	remove_if(A.begin(),A.end(), IsOdd()<int>)
+
+
+
+

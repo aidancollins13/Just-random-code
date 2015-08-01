@@ -1,0 +1,112 @@
+Aidan Collins
+4 Febuary 2014
+Professor SeLLie
+
+Programming Part
+Question 2
+	A : 0xf26070
+	C : 0xf26010
+	B : 0xf26050
+	D : 0xf26030
+	nodePtr : 0xf26070
+Question 3
+	1 : 0x18d3070
+	2 : 0x18d3074
+	3 : 0x18d3078
+	4 : 0x18d307c
+	5 : 0x18d3080
+	intPtr : 0x18d3070
+Question 4
+	n = 128 
+		MMS1 .001573
+		MSS2 4.2e-05
+		MSS4 1e-06
+	n = 256
+		MSS1 .012137
+		MSS2 .000161
+		MSS4 3e-06
+	n = 512
+		MSS1 .094644 
+		MSS2 .000695
+		MSS4 4e-06
+	n = 1024
+		MSS1 .749895
+		MSS2 .002511
+		MSS4 8e-06
+	n = 2048
+		MSS1 6.23598
+		MSS2 .010424
+		MSS4 1.5e-05
+	n = 4096
+		MSS1 47.2355
+		MSS2 .040506
+		MSS4 2.7e-05
+		
+Written Part
+
+Question 1
+	a O(n)
+	b O(n^2)
+	c O(nlog(n))
+	d O(n^3)
+	e O(n^3)
+	f O(log(n^12))
+	g O(nlog(n))
+	h O(n^2)
+	i O(n^3)
+
+Question 2
+	a O(n)
+	b O(n^2)
+	c O(nlog(n))
+	d O(n^3)
+	e O(n)
+	f O(n^2)
+	g O(n^3)
+	h O(log(n)
+	i O(nlog(n))
+	j O(log(n))
+
+Question 3  O(n^2)
+
+Question 4
+	a .2 seconds
+	b 1638.4 seconds
+	c  10995116280 seconds
+
+Question 5  O(n)
+
+Question 6 	because n^2 plus some sufficently large c is always bitter than 
+		2n^2 + 4n log(n) + 5n + 12. n sub 0 is 1 and c is 21.
+
+Questio 7
+Actual Times:
+n    | maxSubsequenceSum1 O(n^3) | maxSubsequenceSum2 O(n^2) | maxSubsequenceSum4 O(n)
+---- | ------------------------- | ------------------------- | -------------------------
+ 128 |			0.001573 | 		     4.2e-05 | 			  1e-06
+ 256 |			0.012137 | 		    0.000161 | 			  3e.o6
+ 512 |			0.094644 |		    0.000695 | 			  4e-06
+1024 |			0.749895 | 		    0.002511 |			  8e-06
+2048 | 			 6.23598 |		    0.010424 |			1.5e-05
+4096 |			 47.2355 |		    0.040506 |			2.7e-05
+
+Question 8
+Predicted Times:
+n    | Exp. maxSubseq. 1 O(n^3) |  Exp. maxSubseq. 2 O(n^2) | Exp. maxSubseq. 4 O(n)
+---  | ------------------------ | ------------------------- | -------------------------
+256  | 			0.012137 | 		   0.000161 | 			3e-06
+512  |		 	0.097096 | 		   0.000644 |			6e.o6
+1024 | 			0.776768 |		   0.002576 |			1.2e-05
+2048 |			6.214144 |		   0.010304 |			2.4e-05
+4096 |			49.713152 |		   0.041216 |			4.8e-05
+
+Question 9
+	maxSubseq 1 is roughly n^3 so each time n doubles the time is multiplied by 8, so 2^18 would be about 			13032004.52
+	maxSubseq 2 is roughly n^2 so each time n doubles the time is multiplied by 8, so 2^18 would be about 
+		165.912576
+	maxSubseq 4 is rougly n so each time n doubles the time is multiplied by 2, so 2^18 would be .001728
+
+Question 10
+	13032004.52 is 21 weeks, 3 days, 20 hours, 0 minutes and 4.5 seconds
+	165.912576 is 2 minutes and 45.9 seconds
+	and .001728 is .001728 seconds

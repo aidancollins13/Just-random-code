@@ -1,0 +1,259 @@
+1) 
+	find()
+		- create another private find method that takes in a Node and call that find method with root
+		- within that second find method
+			- while the given node is not nullptr (if it is return nullptr)
+				- if the item you are searching for is less than the node's element call find with node-> left
+				- if it is more than the node's element call find with node -> right
+				- if it is neither (thus equal to the desired element) return that node
+				
+	printBetween()
+		-create a private printBetween method that takes a low high and a Node and then call that with root
+		-in that mehtod check if the node is nullptr, if it is do nothing if not do the following
+		-if the node's element is in-between low and high print it then call printBetween on left and right
+		-if the node's element is greater than hight call printBetween on node -> left
+		-if the node's element is less than low call printBetween on node -> right
+		
+	negateTree() 
+		-create a private negateTree that takes a node and call that with root
+		-in that method if the node is nullptr do nothing if not do the following
+		-make the nodes element equal to -(the nodes element)
+		-make a temp variable to hold node->right
+		-make node-> right = node->left
+		-make node-> left = temp
+		-call negateTree on node->right and node-> left
+		
+	CountNodesWithOneChild()
+		-create a private CountNodesWithOneChild method that takes a node and return a call for that with root
+		-in the new method if the node is nullptr return zero, otherwise do the following
+		-if either node-> left is nullptr and node-> right is not or node->right is nullptr and node ->left is not return 1 + a call to CountNodesWithOneChild on whichever one was not nullptr
+		-otherwise return a call of CountNodesWithOneChild on left plus one on right
+	
+	average_node_depth()
+		-create a private depth method that takes a node and return a call to that method on root->right plus that method on root->left all devided by root.size()
+		-in that method if the node is nullptr return 0
+		-otherwise return 1 + depth(node->left) + depth(node->right)
+		
+2)
+	2a) O(hieght of tree)
+	
+	2c) O(n)
+	2d) O(n)
+	2e) O(n)
+	
+3)if it is called with a t that is NULL then it will create a core dump because it will try to call ->left on NULL 
+	in order to fix this change the while to (t != NULL && t->left != NULL)
+	
+4)this code will work
+
+5)
+		22b
+	   /   \
+	 17b 	30b
+	/	\		\
+  14r	18r		 50r     NO VIOLATIONS
+  
+  
+		22b
+	   /   \
+	 17b 	30b
+	/	\		\
+  14r	18r		50r 
+			   /
+			  44r       CASE 2
+			  
+		22b
+	   /   \
+	 17b 	30b
+	/	\		\
+  14r	18r		44r 
+				   \
+					50r	 Case 3
+					
+		22b
+	   /   	\
+	 17b 	 \
+	/	\	 44b
+  14r	18r	 /	\
+			30r  50r   NO VIOLATIONS
+			
+			
+6)		15r			ROOT RED
+		
+		15b			NO VIOLATIONS
+		
+		15b
+	   /
+	  4r
+	  
+		15b
+	   /
+	  4r
+	 /
+	2r				CASE 3
+	
+		4b
+	   /  \
+	  2r   5r		NO VIOLATIONS
+	  
+		4b
+	   /  \
+	  2r   5r
+			 \
+			 8r		CASE 1
+			 
+		4r
+	   /  \
+	  2b   5b
+			 \
+			 8r		ROOT RED
+
+		4b
+	   /  \
+	  2b   5b
+			 \
+			 8r	 	NO VIOLATIONS
+			 
+		4b
+	   /  \
+	  2b   5b
+			 \
+			 8r
+				\
+				 16r	CASE 3
+		
+		4b
+	   /  \
+	  2b   8b
+		  /	 \
+		 5r	 16r   NO VIOLATIONS
+		 
+		4b
+	   /  \
+	  2b   8b
+		  /	 \
+		 5r	 16r
+				\ 
+				 17r	CASE 1
+				 
+		4b
+	   /  \
+	  2b   8r
+		  /	 \
+		 5b	 16b
+				\ 
+				 17r 	NO VIOLATIONS
+				
+		4b
+	   /  \
+	  2b   8r
+		  /	 \
+		 5b	 16b
+				\ 
+				 17r
+					\
+					18r	 CASE 30b
+	   		
+		4b
+	   /  \
+	  2b   8r
+		  /	 \
+		 5b	 17b
+			/	\ 
+		   16r	 18r  NO VIOLATIONS
+		   
+		4b
+	   /  \
+	  2b   8r
+		  /	 \
+		 5b	 17b
+			/	\ 
+		   16r	 18r
+					\
+					21r  CASE 1
+					
+		4b
+	   /  \
+	  2b   8r
+		  /	 \
+		 5b	 17r
+			/	\ 
+		   16b	 18b
+					\
+					21r  CASE 3
+					
+		8b
+	   /  	\
+  	  4r  	17r
+ 	 /  \    |   \
+	3b   5b  16b  18b
+			         \
+					 21r   NO VIOLATIONS
+					 
+7)
+	template <class Comparable>
+	void RedBlackTree<Comparable>::rightRotateRecolor(Node * k2){
+		typedef BinareNode<Comparable) node;
+		
+		node * p = k2->left;
+		node * gc= p->left;
+		node * gcr = gc->right;
+		k2 -> left = gc;
+		gc->right = p;
+		p->left = gcr;
+		p->color = RED;
+		gc->color = BLACK;
+	}
+
+8) because 20 or 40 or 2000 are divisiable by 4 so 4 times anything mod (2o or 40 or 2000) will equal 0
+
+9a) |  |4371|  |6173|   |
+
+	|   | 4371|   | was occupied |    |
+
+	|   |4371|3327|26|    
+	
+	|    |    |    |    |4371|3327|26|    |    |    |    |
+	
+	|    |    |    |1323|4371|3327| 26 |4340|4199|    |9679|
+	
+	
+9b)|    |****|    |****|****| 
+		  \/        \/	 \/
+		 4371      6173 9679
+					\/   \/
+				   1323 4344
+						 \/
+						4199
+						
+	|    |****|    |****|****| 
+		  \/        \/	 \/
+		 4371      1323 9679
+					     \/
+				        4344
+						 \/
+						4199
+						
+   |    |****|    |****|****| 
+		  \/        \/	 \/
+		 4371      1323 3324
+					     \/
+				        9679
+						 \/
+						4344
+						 \/
+						4199
+						
+   [|    |****|    |****|****|    |    |    |****|    |****|]
+		   \/    	 \/	  \/				  \/		\/
+		  3324		1323 4371				 4199	   4344
+														\/
+													   9679
+													   
+   [|    |****|    |****|****|    |    |    |****|    |****|]
+		   \/    	 \/	  \/				  \/		\/
+		  3324		1323 4371				 4199	    21
+														\/
+													   4344
+													    \/
+													   9679

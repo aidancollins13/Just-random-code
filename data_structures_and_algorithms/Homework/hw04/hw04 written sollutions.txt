@@ -1,0 +1,301 @@
+CS2134 Spring 2015
+Homework 4 Written Solutions
+
+------------------------------------------------------------------------------------------------
+1. Psuedocode and Pre/Post-conditions for select_item():
+------------------------------------------------------------------------------------------------
+
+Psuedocode: Everyone may have different approaches at breaking down this problem.
+(Note that the idea is that you don't need to write it as code, but as regular English to be understood logically.)
+
+1. Initialize "tmp_itr," so that we can update it as we iterate (easiest to initialize as "end")
+2. Loop through the range from "start" to "end," by incrementing "start"
+3. Apply the functor pred() to "start"
+4. If pred() evaluates to true, set "tmp_itr" equal to "start"
+5. Return tmp_itr
+
+Preconditions: These are the things that must be true before running this function.
+
+1. "start" and "end" must be valid Forward Iterators dealing with the same collection.
+2. "pred" must be a valid Functor with overloaded () that can evaluate these iterators and return a boolean.
+
+Postconditions: These are the things that must be true after running this function.
+
+1. A valid Forward Iterator is returned, which points to the last element where "pred" evaluated to true.
+2. The collection should be unchanged.
+
+------------------------------------------------------------------------------------------------
+2. Recursion Tree and Runtime:
+------------------------------------------------------------------------------------------------
+
+(a) Programming Question 3, with n = 3
+
+       n=3
+     /     \
+  n=2       n=2
+ /   \     /   \
+n=1  n=1  n=1  n=1
+
+O(2^n)
+
+(b) Programming question 4, with a = {1,2,3,4}
+
+     {1,2,3,4}
+     /       \
+ {1,2}       {3,4}
+ /   \       /   \
+{1} {2}     {3} {4}
+
+O(n)
+
+------------------------------------------------------------------------------------------------
+3. Iterator Values:
+------------------------------------------------------------------------------------------------
+
+vector<int>::iterator itrStart = a.begin();
+vector<int>::iterator itrEnd = a.end();
+vector<int>::iterator itrMid = a.begin() + (itrEnd - itrStart)/2;
+
+(Recall that ranges are inclusive of the start iterator, and exclusive of the end iterator.)
+
+------------------------------------------------------------------------------------------------
+4. Fill in the blanks:
+------------------------------------------------------------------------------------------------
+
+(a) itr = A.begin() + (A.end() - A.begin())/2;
+
+(b) sort(A.begin() + (A.end() - A.begin())/2, A.end());
+
+(c) merge( A.begin(), 
+A.begin() + (A.end() - A.begin())/2, 
+A.begin() + (A.end() - A.begin())/2, 
+A.end(), 
+D.begin());
+
+(d) copy(D.begin(), D.end(), A.begin());
+
+------------------------------------------------------------------------------------------------
+5. myRecFunc(n):
+------------------------------------------------------------------------------------------------
+
+It may have been helpful to double-check your answer by running the code. However, you should also have tried to work out the question manually, as you may see something similar on your upcoming exam. When working it out manually, it may be helpful to draw a recursion tree to remember what calls you have already made.
+
+(a) myRecFunc(4):
+
+4: 2: 1: 0: 0:
+1: 0: 0:
+*
+2: 1: 0: 0:
+1: 0: 0:
+*
+***
+
+(b) Runtime: O(n log n)
+
+------------------------------------------------------------------------------------------------
+6. myRecFunc(n):
+------------------------------------------------------------------------------------------------
+
+It may have been helpful to double-check your answer by running the code. However, you should also have tried to work out the question manually, as you may see something similar on your upcoming exam. When working it out manually, it may be helpful to draw a recursion tree to remember what calls you have already made.
+
+(a) myRecFunc(4):
+
+4: 2: 1: 0: 
+
+(b) Runtime: O(log n)
+
+------------------------------------------------------------------------------------------------
+7. Recursive Fibonacci Calls:
+------------------------------------------------------------------------------------------------
+
+We can show our work in several ways. As long as you show that the number of calls of fib(n) is roughly equivalent to the number of calls of fib(n-1) + fib(n-2) + 2, we will give you points. (Note that the +2 is here because of how I define the base cases of fib(0) and fib(1). I explain this more below.) For instance:
+
+When n=3, fib(3) will call: fib(2) and fib(1).
+fib(2) will call fib(1) and fib(0).
+fib(1) and fib(0) meet the base case, and will not make further calls.
+In other words, fib(0) and fib(1) would make 0 *additional* function calls.
+
+(Side note: in your interpretation of this question, you may have said that fib(0) and fib(1) actually take 1 function call, since we actually need to call fib(0) or fib(1) to begin with. This is accepted. This would just be a difference of 1 in your solution, versus the following solution.)
+
+But let's go back up the conceptual recursion tree.
+fib(2) would make 2 function calls total (to call fib(1) and fib(0)).
+fib(3) will make 4 calls total, since it calls fib(2) and fib(1), and we know that fib(2) makes 2 additional calls.
+
+(Following the earlier side note, you can say that *we* take 5 calls to run fib(3), because we have to actually call fib(3) ourselves first. We will accept either interpretation of whether you count this one additional call or not.)
+
+fib(4) will call fib(3) and fib(2). In addition to these two calls, we know fib(3) makes 4 calls, and fib(2) makes 2 calls. Thus, we make 8 calls total. (Again, if you count us calling fib(4) for the first time, it will be 9 calls total.)
+
+fib(5) follows this same pattern. It will make 2 calls first, to call fib(4) and fib(3). fib(4) makes 8 calls and fib(3) makes 4 calls. Thus, fib(5) itself makes 14 calls total. (And if you count us calling fib(5), we will have made 15 calls total.)
+
+An explanation similar to this, or one that makes use of recursion trees, will be enough to get you credit on this question.
+
+------------------------------------------------------------------------------------------------
+8. insertionSort:
+------------------------------------------------------------------------------------------------
+
+You should expect to be able to do this manually, based on following the code provided (and understanding how insertionSort works conceptually). It is helpful to run the code just to check and confirm your answer, but expect to potentially do this on an upcoming exam.
+
+8 9 -11 2 0 3 
+-11 8 9 2 0 3 
+-11 2 8 9 0 3 
+-11 0 2 8 9 3 
+-11 0 2 3 8 9 
+
+------------------------------------------------------------------------------------------------
+9. mergeSort:
+------------------------------------------------------------------------------------------------
+
+You should expect to be able to do this manually, based on following the code provided (and understanding how mergeSort works conceptually). It is helpful to run the code just to check and confirm your answer, but expect to potentially do this on an upcoming exam.
+
+8 9 -11 2 0 3
+-11 8 9 2 0 3
+-11 8 9 0 2 3
+-11 8 9 0 2 3
+-11 0 2 3 8 9
+
+------------------------------------------------------------------------------------------------
+10. quickSort:
+------------------------------------------------------------------------------------------------
+
+You should expect to be able to do this manually, based on following the code provided (and understanding how quickSort works conceptually). It is helpful to run the code just to check and confirm your answer, but expect to potentially do this on an upcoming exam.
+
+-11 8 3 2 0 9 
+-11 0 2 9 8 3 
+-11 0 2 3 8 9 
+
+------------------------------------------------------------------------------------------------
+11. mergeSort and quickSort Recursion Tree:
+------------------------------------------------------------------------------------------------
+
+(a) mergeSort on a = {28,10,2,27,5,1}
+
+The following is not the recursive tree that we asked for, but is just an illustration of the indices passed in at each call.
+
+Indices given as (left,right):
+
+               (0,5)
+            /         \
+       (0,2)           (3,5)
+      /     \         /     \
+   (0,1)   (2,2)    (3,4)  (5,5)
+  /     \           /   \
+(0,0)  (1,1)     (3,3) (4,4)
+
+Below is a recursive tree that shows the FULL collection, at the time the call is made.
+
+                                  {28,10,2,27,5,1}
+                                /                  \
+                {28,10,2,27,5,1}                    {2,10,28,27,5,1}
+                   /         \                         /         \
+        {28,10,2,27,5,1} {10,28,2,27,5,1}   {2,10,28,27,5,1} {2,10,28,5,27,1}
+         /           \                        /        \
+{28,10,2,27,5,1} {28,10,2,27,5,1}  {2,10,28,27,5,1} {2,10,28,27,5,1}
+
+(b) quicksort on a = {28,10,2,27,5,1}
+
+The following is not the recursive tree that we asked for, but is just an illustration of the indices passed in at each call.
+
+Indices given as (left,right):
+
+   (0,5)
+  /     \
+(0,0)   (2,5)
+         /   \
+      (2,3) (5,5)
+      /   \
+   (2,1) (3,3)
+
+Below is a recursive tree that shows the FULL collection, at the time the call is made.
+
+        {28 10 2 27 5 1}
+       /               \
+{1 2 28 27 5 10}       {1 2 28 27 5 10}
+                       /              \
+          {1 2 5 10 27 28}            {1 2 5 10 27 28}
+           /          \
+{1 2 5 10 27 28}     {1 2 5 10 27 28}
+
+------------------------------------------------------------------------------------------------
+12. Average Running Time:
+------------------------------------------------------------------------------------------------
+
+(a) insertionSort: O(n)
+Because we are assuming that the vector is in "almost" sorted order, we are assuming that we do not have to do a complete inversion of the entire vector (which would be the worst case). We know that on average, and even in the best case, we need to go through the entire vector at least once. In "almost" sorted order, we may have to go through the vector just a few more times, but we assume this means that we do not have to go through the vector a multiple of "n" times. Thus, this takes O(n) time.
+
+(b) mergeSort: O(n log n)
+Regardless of how the vector looks, the mergeSort algorithm will *always* take O(n log n) time, because we will always perform our divide-and-conquer operations without checking the state of the vector first. These operations will always take O(n log n) time.
+
+(c) quickSort: O(n log n)
+By assuming that the vector is almost sorted, we make the strong assumption that our choice of the pivot position will be good. This means that our divide-and-conquer algorithm would split up the vector roughly equally each time. This is really just an assumption that we do not fall into the worst-case situation of quickSort, which would give O(n^2) instead of O(n log n).
+
+------------------------------------------------------------------------------------------------
+13. Quick Select Run Time:
+------------------------------------------------------------------------------------------------
+
+O(n). Keep in mind that we don't need to sort completely to find the element we're looking for. We just need to recursively take a look at the half of the collection that we know our element will be in. However, this will still take some time to look through the elements and figure out where to look.
+
+------------------------------------------------------------------------------------------------
+14. Quick Select Algorithm:
+------------------------------------------------------------------------------------------------
+
+QuickSelect just needs to find the element we are looking for, rather than sort the entire collection. We recall that in both the QuickSort and QuickSelect algorithms, we will pick a pivot number and split the collection around that pivot. (To give an example, let's say we pick a pivot number, and find that four numbers are less than it, and three numbers are greater than it. This means that our pivot number is the fifth smallest element. If we were looking for the fifth smallest element in our collection, that means that we've found it already and do not need to continue running the algorithm!) More generically speaking, if we find that i+1 = k, then we have already found the element we are loooking for, and our algorithm will stop.
+
+------------------------------------------------------------------------------------------------
+15. Stack using vector<char> implementation:
+------------------------------------------------------------------------------------------------
+
+Recall that stacks are ”last in, first out” (LIFO) in ordering. The solution below
+builds the vector from left (bottom/earliest) to right (top/latest).
+
+Stack<char> s;  // [],                   s.top() = ???, x not defined
+char x = '0';   // [],                   s.top() = ???, x = '0'
+s.push('a');    // ['a'],                s.top() = 'a', x = '0'
+s.push('b');    // ['a', 'b'],           s.top() = 'b', x = '0'
+s.push('c');    // ['a', 'b', 'c'],      s.top() = 'c', x = '0'
+s.push('d');    // ['a', 'b', 'c', 'd'], s.top() = 'd', x = '0'
+x = s.top();    // ['a', 'b', 'c', 'd'], s.top() = 'd', x = 'd'
+s.pop();        // ['a', 'b', 'c'],      s.top() = 'c', x = 'd'
+x = s.top();    // ['a', 'b', 'c'],      s.top() = 'c', x = 'c'
+s.push('e');    // ['a', 'b', 'c', 'e'], s.top() = 'e', x = 'c'
+s.pop();        // ['a', 'b', 'c'],      s.top() = 'c', x = 'c'
+s.pop();        // ['a', 'b'],           s.top() = 'b', x = 'c'
+s.push('f');    // ['a', 'b', 'f'],      s.top() = 'f', x = 'c'
+x = s.top();    // ['a', 'b', 'f'],      s.top() = 'f', x = 'f'
+s.push('g');    // ['a', 'b', 'f', 'g'], s.top() = 'g', x = 'f'
+x = s.top();    // ['a', 'b', 'f', 'g'], s.top() = 'g', x = 'g'
+s.pop();        // ['a', 'b', 'f'],      s.top() = 'f', x = 'g'
+x = s.top();    // ['a', 'b', 'f'],      s.top() = 'f', x = 'f'
+
+------------------------------------------------------------------------------------------------
+16. Queue using circular array implementation:
+------------------------------------------------------------------------------------------------
+
+Recall that queues are ”first in, first out” (FIFO) in ordering. The solution
+below shows an array of size 4, with index 0 on the left and index 3 on the right.
+When this circular implementation is used, we need to keep track of where the
+beginning and the end of our queue is, based on the indices of the array.
+
+Note: When we call push(), we will increment theBack by 1 (or wrap back to
+0) to keep track of the index of the last item in the queue. When we call pop(),
+we will increment theFront by 1 (or wrap back to 0) to keep track of the index
+of the first item in the queue.
+
+int x;
+queue<int> q;  // [ , , , ], theFront = 0, theBack = 3, currentSize = 0, x = ?
+q.push(1);     // [1, , , ], theFront = 0, theBack = 0, currentSize = 1, x = ?
+q.push(2);     // [1,2, , ], theFront = 0, theBack = 1, currentSize = 2, x = ?
+q.push(3);     // [1,2,3, ], theFront = 0, theBack = 2, currentSize = 3, x = ?
+x = q.front(); // [1,2,3, ], theFront = 0, theBack = 2, currentSize = 3, x = 1
+q.pop();       // [ ,2,3, ], theFront = 1, theBack = 2, currentSize = 2, x = 1
+q.push(4);     // [ ,2,3,4], theFront = 1, theBack = 3, currentSize = 3, x = 1
+x = q.front(); // [ ,2,3,4], theFront = 1, theBack = 3, currentSize = 3, x = 2
+q.push(5);     // [5,2,3,4], theFront = 1, theBack = 0, currentSize = 4, x = 2
+q.pop();       // [5, ,3,4], theFront = 2, theBack = 0, currentSize = 3, x = 2
+q.push(6);     // [5,6,3,4], theFront = 2, theBack = 1, currentSize = 4, x = 2
+x = q.front(); // [5,6,3,4], theFront = 2, theBack = 1, currentSize = 4, x = 3
+q.pop();       // [5,6, ,4], theFront = 3, theBack = 1, currentSize = 3, x = 3
+q.pop();       // [5,6, , ], theFront = 0, theBack = 1, currentSize = 2, x = 3
+q.pop();       // [ ,6, , ], theFront = 1, theBack = 1, currentSize = 1, x = 3
+x = q.front(); // [ ,6, , ], theFront = 1, theBack = 1, currentSize = 1, x = 6
+q.pop();       // [ , , , ], theFront = 2, theBack = 1, currentSize = 0, x = 6
+q.push(7);     // [ , ,7, ], theFront = 2, theBack = 2, currentSize = 1, x = 6
