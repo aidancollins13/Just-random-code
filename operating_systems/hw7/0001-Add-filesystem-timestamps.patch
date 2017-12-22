@@ -1,0 +1,245 @@
+From 74f4ca9a207cb9517984599fe1543c958acb5baa Mon Sep 17 00:00:00 2001
+From: Aidan Collins <ac5152@nyu.edu>
+Date: Mon, 5 Dec 2016 18:39:44 -0500
+Subject: [PATCH] Add filesystem timestamps
+
+---
+ file.h      |  8 ++++++++
+ fs.c        | 18 ++++++++++++++++++
+ fs.h        | 11 +++++++++--
+ ls.c        |  5 +++--
+ mkfs.c      | 12 ++++++++++++
+ partner.txt |  1 +
+ stat.h      |  6 ++++++
+ sysfile.c   | 11 +++++++++++
+ 8 files changed, 68 insertions(+), 4 deletions(-)
+ create mode 100644 partner.txt
+
+diff --git a/file.h b/file.h
+index 5a4a463..7f3a76b 100644
+--- a/file.h
++++ b/file.h
+@@ -22,6 +22,14 @@ struct inode {
+   short nlink;
+   uint size;
+   uint addrs[NDIRECT+1];
++  
++  uint second;
++  uint minute; 
++  uint hour;
++  uint day;
++  uint month;
++  uint year;
++
+ };
+ #define I_BUSY 0x1
+ #define I_VALID 0x2
+diff --git a/fs.c b/fs.c
+index 025b326..acfeefe 100644
+--- a/fs.c
++++ b/fs.c
+@@ -19,6 +19,7 @@
+ #include "fs.h"
+ #include "buf.h"
+ #include "file.h"
++#include "date.h"
+ 
+ #define min(a, b) ((a) < (b) ? (a) : (b))
+ static void itrunc(struct inode*);
+@@ -209,6 +210,11 @@ iupdate(struct inode *ip)
+   dip->minor = ip->minor;
+   dip->nlink = ip->nlink;
+   dip->size = ip->size;
++  dip->second = ip->second;
++  dip->minute = ip->minute;
++  dip->hour = ip->hour;
++  dip->day = ip->day;
++  dip->year = ip->year;
+   memmove(dip->addrs, ip->addrs, sizeof(ip->addrs));
+   log_write(bp);
+   brelse(bp);
+@@ -286,6 +292,12 @@ ilock(struct inode *ip)
+     ip->minor = dip->minor;
+     ip->nlink = dip->nlink;
+     ip->size = dip->size;
++    ip->second = dip->second;
++    ip->minute = dip->minute;
++    ip->hour = dip->hour;
++    ip->day = dip->day;
++    ip->month = dip->month;
++    ip->year = dip->year;
+     memmove(ip->addrs, dip->addrs, sizeof(ip->addrs));
+     brelse(bp);
+     ip->flags |= I_VALID;
+@@ -427,6 +439,12 @@ stati(struct inode *ip, struct stat *st)
+   st->type = ip->type;
+   st->nlink = ip->nlink;
+   st->size = ip->size;
++  st->second = ip->second;
++  st->minute = ip->minute;
++  st->hour = ip->hour;
++  st->day = ip->day;
++  st->year = ip->year;
++
+ }
+ 
+ //PAGEBREAK!
+diff --git a/fs.h b/fs.h
+index e1d7d09..861ad0d 100644
+--- a/fs.h
++++ b/fs.h
+@@ -3,7 +3,7 @@
+ 
+ 
+ #define ROOTINO 1  // root i-number
+-#define BSIZE 512  // block size
++#define BSIZE 512  // block size this works?
+ 
+ // Disk layout:
+ // [ boot block | super block | log | inode blocks | free bit map | data blocks ]
+@@ -20,7 +20,7 @@ struct superblock {
+   uint bmapstart;    // Block number of first free map block
+ };
+ 
+-#define NDIRECT 12
++#define NDIRECT 22
+ #define NINDIRECT (BSIZE / sizeof(uint))
+ #define MAXFILE (NDIRECT + NINDIRECT)
+ 
+@@ -32,6 +32,13 @@ struct dinode {
+   short nlink;          // Number of links to inode in file system
+   uint size;            // Size of file (bytes)
+   uint addrs[NDIRECT+1];   // Data block addresses
++
++  uint second;
++  uint minute; 
++  uint hour;
++  uint day;
++  uint month;
++  uint year;
+ };
+ 
+ // Inodes per block.
+diff --git a/ls.c b/ls.c
+index b6ddd7f..25fe18f 100644
+--- a/ls.c
++++ b/ls.c
+@@ -43,7 +43,7 @@ ls(char *path)
+   
+   switch(st.type){
+   case T_FILE:
+-    printf(1, "%s %d %d %d\n", fmtname(path), st.type, st.ino, st.size);
++    printf(1, "%s %d %d %d %d/%d/%d %d:%d:%d\n", fmtname(path), st.type, st.ino, st.size, st.day, st.month, st.year, st.hour, st.minute, st.second);
+     break;
+   
+   case T_DIR:
+@@ -63,7 +63,8 @@ ls(char *path)
+         printf(1, "ls: cannot stat %s\n", buf);
+         continue;
+       }
+-      printf(1, "%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
++      //printf(1, "%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
++      printf(1, "%s %d %d %d %d/%d/%d %d:%d:%d\n", fmtname(buf), st.type, st.ino, st.size, st.day, st.month, st.year, st.hour, st.minute, st.second);
+     }
+     break;
+   }
+diff --git a/mkfs.c b/mkfs.c
+index 0a10754..45267b8 100644
+--- a/mkfs.c
++++ b/mkfs.c
+@@ -4,6 +4,7 @@
+ #include <string.h>
+ #include <fcntl.h>
+ #include <assert.h>
++#include <time.h>
+ 
+ #define stat xv6_stat  // avoid clash with host struct stat
+ #include "types.h"
+@@ -225,11 +226,22 @@ ialloc(ushort type)
+ {
+   uint inum = freeinode++;
+   struct dinode din;
++  time_t  t;
++  struct tm *d;
+ 
+   bzero(&din, sizeof(din));
+   din.type = xshort(type);
+   din.nlink = xshort(1);
+   din.size = xint(0);
++  time(&t);
++  d = gmtime(&t);
++  din.second = d->tm_sec;
++  din.minute = d->tm_min;
++  din.hour = d->tm_hour;
++  din.day = d->tm_mday;
++  din.month = d->tm_mon;
++  din.year = d->tm_year;
++
+   winode(inum, &din);
+   return inum;
+ }
+diff --git a/partner.txt b/partner.txt
+new file mode 100644
+index 0000000..ae0c1e4
+--- /dev/null
++++ b/partner.txt
+@@ -0,0 +1 @@
++Jack Martinez
+diff --git a/stat.h b/stat.h
+index 8a80933..2bccb53 100644
+--- a/stat.h
++++ b/stat.h
+@@ -8,4 +8,10 @@ struct stat {
+   uint ino;    // Inode number
+   short nlink; // Number of links to file
+   uint size;   // Size of file in bytes
++  uint second;
++  uint minute;
++  uint hour;
++  uint day;
++  uint month;
++  uint year;
+ };
+diff --git a/sysfile.c b/sysfile.c
+index 2209f6e..b6efc20 100644
+--- a/sysfile.c
++++ b/sysfile.c
+@@ -13,6 +13,7 @@
+ #include "fs.h"
+ #include "file.h"
+ #include "fcntl.h"
++#include "date.h"
+ 
+ // Fetch the nth word-sized system call argument as a file descriptor
+ // and return both the descriptor and the corresponding struct file.
+@@ -240,6 +241,7 @@ create(char *path, short type, short major, short minor)
+ {
+   uint off;
+   struct inode *ip, *dp;
++  struct rtcdate date;
+   char name[DIRSIZ];
+ 
+   if((dp = nameiparent(path, name)) == 0)
+@@ -258,10 +260,19 @@ create(char *path, short type, short major, short minor)
+   if((ip = ialloc(dp->dev, type)) == 0)
+     panic("create: ialloc");
+ 
++  cmostime(&date);
++
+   ilock(ip);
+   ip->major = major;
+   ip->minor = minor;
+   ip->nlink = 1;
++  ip->second = date.second;
++  ip->minute = date.minute;
++  ip->hour = date.hour;
++  ip->day = date.day;
++  ip->month = date.month;
++  ip->year = date.year;
++
+   iupdate(ip);
+ 
+   if(type == T_DIR){  // Create . and .. entries.
+-- 
+2.10.2
+

@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+        {% for image in images %}
+        <div id=images>
+            <img src= {{ image.name }} />
+            </br>
+            {{ image.caption }}
+        </div>
+        {% endfor %}
+{% endblock %}
+

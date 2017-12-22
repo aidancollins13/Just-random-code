@@ -1,0 +1,14 @@
+salt 128-bit
+random-> give s a 32-bit
+
+4 calls to random
+uing salt[4]
+
+(uchar*)salt - cast it as unsigned char (16 bytes 128bits)
+
+for (int i = 0; i < len(salt); i++){
+    salt[i] = random();
+}
+
+uchar[16] f_salt = (char*)salt;
+

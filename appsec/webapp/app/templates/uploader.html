@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<!-- This is he page whre users can upload images, it has an upload box that when uploaded redirects to th eupload page--!>
+<html>
+    <head>
+        <title>Simple Image Uploader</title>
+    </head>
+    <body>
+        <a href={{url_for("index")}}> Home </a>
+        <div class="container">
+        <form method='POST' enctype="multipart/form-data" action = {{url_for("upload")}}>
+                <input type="file" name="file" />
+                Caption
+                <input type="text" name="caption" />
+                <input type=submit value=Upload />
+            </form>
+        </div>
+    </body>
+</html>
+
